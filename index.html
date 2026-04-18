@@ -31,23 +31,6 @@
         /* Slide Styles */
         .slide { opacity: 0; transition: opacity 1.5s ease-in-out; position: absolute; inset: 0; }
         .slide.active { opacity: 0.35; }
-
-        /* Scanning Line Animation */
-        .scan-line {
-            position: absolute;
-            width: 100%;
-            height: 2px;
-            background: rgba(239, 68, 68, 0.5);
-            box-shadow: 0 0 15px 2px #ef4444;
-            top: 0;
-            z-index: 5;
-            animation: scan 4s linear infinite;
-        }
-
-        @keyframes scan {
-            0% { top: 0%; }
-            100% { top: 100%; }
-        }
     </style>
 </head>
 <body>
@@ -59,16 +42,11 @@
     </nav>
 
     <header id="hero" class="relative h-[85vh] flex items-center justify-center overflow-hidden">
-        <!-- Слайд 1: двигатель -->
-        <div class="slide active bg-cover bg-center" style="background-image: url('./images/engine.jpg')"></div>
+        <div class="slide active bg-cover bg-center" style="background-image: url('./images/car.jpg')"></div>
 
-        <!-- Слайд 2: тормозная система -->
+        <div class="slide bg-cover bg-center" style="background-image: url('./images/engine.jpg')"></div>
+
         <div class="slide bg-cover bg-center" style="background-image: url('./images/brake-system.jpg')"></div>
-
-        <!-- Слайд 3: фара / кузовные детали / склад -->
-        <div class="slide bg-cover bg-center" style="background-image: url('./images/headlight-parts.jpg')"></div>
-
-        <!-- <div class="absolute inset-0 bg-black/45 z-[1]"></div> -->
 
         <div class="relative z-10 text-center px-4">
             <span class="text-red-500 font-bold tracking-[0.3em] uppercase text-sm mb-4 block">
@@ -209,32 +187,11 @@
             }
         });
 
-        // 3. Form Submission (Google App Script)
+        // 3. Form Submission (Google Script Logic currently disabled)
         const form = document.getElementById('orderForm');
-        const result = document.getElementById('form-result');
-        const scriptURL = 'YOUR_GOOGLE_APP_SCRIPT_URL_HERE'; 
-
         form.addEventListener('submit', function(e) {
             e.preventDefault();
-            const formData = new FormData(form);
-            result.classList.remove('hidden');
-            result.textContent = "Processing inquiry...";
-            result.className = "text-sm text-center mt-4 text-gray-400";
-
-            fetch(scriptURL, { 
-                method: 'POST', 
-                body: formData,
-                mode: 'no-cors' 
-            })
-            .then(() => {
-                result.textContent = "Success! We will contact you shortly.";
-                result.className = "text-sm text-center mt-4 text-green-500 font-bold";
-                form.reset();
-            })
-            .catch(error => {
-                result.textContent = "Error sending. Please try again.";
-                result.className = "text-sm text-center mt-4 text-red-500 font-bold";
-            });
+            alert('Sending logic is not yet implemented. Please connect your Google Script URL when ready.');
         });
     </script>
 </body>
