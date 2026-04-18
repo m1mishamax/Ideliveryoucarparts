@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Я принесу это вам | Эксклюзивный поиск запчастей</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #0a0a0a; color: #f4f4f4; scroll-behavior: smooth; }
+        .glass-card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
+        .accent-gradient { background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%); }
+        
+        .input-style { 
+            background: rgba(255, 255, 255, 0.05); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            border-radius: 0.75rem; 
+            padding: 1rem; 
+            width: 100%; 
+            outline: none; 
+            transition: 0.3s; 
+            color: white;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+        .input-style:focus { border-color: #ef4444; background: rgba(255, 255, 255, 0.08); }
+        
+        select option { background-color: #1a1a1a; color: white; }
+
+        .slide { opacity: 0; transition: opacity 1s ease-in-out; position: absolute; inset: 0; }
+        .slide.active { opacity: 0.4; }
+    </style>
+</head>
+<body>
+
+    <nav class="flex items-center justify-center px-8 py-6 sticky top-0 z-50 glass-card">
+        <div class="text-xl md:text-2xl font-extrabold tracking-tighter italic text-red-600 uppercase">
+            Я ПРИНЕСУ <span class="text-white">ЭТО ВАМ</span>
+        </div>
+    </nav>
+
+    <header id="hero" class="relative h-[85vh] flex items-center justify-center overflow-hidden">
+        <div class="slide active bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=80')"></div>
+        <div class="slide bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&q=80')"></div>
+        <div class="slide bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1583121274602-3e2820c69888?auto=format&fit=crop&q=80')"></div>
+
+        <div class="relative z-10 text-center px-4">
+            <span class="text-red-500 font-bold tracking-[0.3em] uppercase text-sm mb-4 block">Эксклюзивный сервис поиска</span>
+            <h1 class="text-5xl md:text-8xl font-extrabold mb-6 tracking-tighter uppercase leading-none">
+                ЛЮБАЯ ДЕТАЛЬ. <br><span class="text-red-600 text-shadow-xl">В ЛЮБУЮ ТОЧКУ.</span>
+            </h1>
+            <p class="text-gray-200 text-lg md:text-xl max-w-2xl mx-auto mb-10 font-light drop-shadow-md">
+                Мы находим редкие комплектующие там, где другие сдаются.
+            </p>
+            <a href="#order-form" class="accent-gradient px-12 py-5 rounded-full font-bold uppercase tracking-widest hover:scale-105 transition shadow-2xl inline-block">
+                Оформить заявку
+            </a>
+        </div>
+
+        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex space-x-3">
+            <div class="dot w-12 h-1 bg-red-600 rounded-full cursor-pointer"></div>
+            <div class="dot w-12 h-1 bg-white/20 rounded-full cursor-pointer transition"></div>
+            <div class="dot w-12 h-1 bg-white/20 rounded-full cursor-pointer transition"></div>
+        </div>
+    </header>
+
+    <section id="order-form" class="py-24 px-6 max-w-7xl mx-auto">
+        <div class="grid lg:grid-cols-2 gap-20 items-start">
+            <div>
+                <h2 class="text-5xl font-extrabold mb-8 italic uppercase leading-tight">
+                    Я ПРИНЕСУ ЭТО ВАМ — <br>
+                    <span class="text-red-600 text-3xl font-normal">ВАШ ПЕРСОНАЛЬНЫЙ СНАБЖЕНЕЦ</span>
+                </h2>
+                <div class="space-y-6">
+                    <div class="flex items-center space-x-4 p-6 glass-card rounded-2xl border-l-4 border-red-600">
+                        <i data-lucide="shield-check" class="text-red-500 w-8 h-8"></i>
+                        <div>
+                            <p class="font-bold uppercase text-sm">Гарантия поиска</p>
+                            <p class="text-xs text-gray-500 italic">Находим даже те детали, которые сняты с производства.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card p-10 rounded-[2rem] border-red-900/20 shadow-3xl relative">
+                <h3 class="text-2xl font-bold mb-8 uppercase tracking-widest text-red-500">Заявка на поиск</h3>
+                
+                <form id="orderForm" class="space-y-5 relative z-10">
+                    <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY_HERE">
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-bold uppercase text-gray-500 ml-1">Автомобиль</label>
+                            <input type="text" name="car_make" placeholder="BMW" class="input-style" required>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-bold uppercase text-gray-500 ml-1">Модель и год</label>
+                            <input type="text" name="car_model" placeholder="X5 M (2024)" class="input-style" required>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-bold uppercase text-gray-500 ml-1">Ссылка на деталь (если есть)</label>
+                        <div class="relative">
+                            <input type="url" name="part_link" placeholder="https://..." class="input-style pl-12">
+                            <i data-lucide="link" class="w-4 h-4 absolute left-4 top-4 text-gray-500"></i>
+                        </div>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-bold uppercase text-gray-500 ml-1">Что именно нужно?</label>
+                        <textarea name="part_description" rows="2" placeholder="Напр: Фара левая адаптивная..." class="input-style" required></textarea>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-bold uppercase text-gray-500 ml-1">Где ответить?</label>
+                            <div class="relative">
+                                <select id="contact-method" name="contact_via" class="input-style pr-10 cursor-pointer">
+                                    <option value="Phone">Голосовой звонок</option>
+                                    <option value="WhatsApp">WhatsApp</option>
+                                    <option value="Telegram">Telegram</option>
+                                </select>
+                                <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none opacity-50">
+                                    <i data-lucide="chevron-down" class="w-4 h-4 text-white"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-bold uppercase text-gray-500 ml-1">Ваш контакт</label>
+                            <input id="contact-input" name="contact_info" type="tel" placeholder="+7 (___) ___-__-__" class="input-style" required>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="w-full py-5 accent-gradient rounded-2xl font-black text-xl uppercase hover:brightness-110 transition shadow-lg shadow-red-600/20 mt-4">
+                        Найти и привезти
+                    </button>
+                    <p id="form-result" class="text-sm text-center mt-4 hidden"></p>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        lucide.createIcons();
+
+        // 1. Слайдер
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.dot');
+        let currentSlide = 0;
+
+        function showSlide(index) {
+            slides.forEach(s => s.classList.remove('active'));
+            dots.forEach(d => { d.classList.remove('bg-red-600'); d.classList.add('bg-white/20'); });
+            slides[index].classList.add('active');
+            dots[index].classList.remove('bg-white/20');
+            dots[index].classList.add('bg-red-600');
+        }
+
+        function nextSlide() { currentSlide = (currentSlide + 1) % slides.length; showSlide(currentSlide); }
+        let slideInterval = setInterval(nextSlide, 5000);
+
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                clearInterval(slideInterval);
+                currentSlide = index;
+                showSlide(index);
+                slideInterval = setInterval(nextSlide, 5000);
+            });
+        });
+
+        // 2. Динамические контакты
+        const contactMethod = document.getElementById('contact-method');
+        const contactInput = document.getElementById('contact-input');
+
+        contactMethod.addEventListener('change', function() {
+            if (this.value === 'Telegram') {
+                contactInput.placeholder = '@username';
+                contactInput.type = 'text';
+            } else {
+                contactInput.placeholder = '+7 (___) ___-__-__';
+                contactInput.type = 'tel';
+            }
+        });
+
+        // 3. Отправка формы (AJAX)
+        const form = document.getElementById('orderForm');
+        const result = document.getElementById('form-result');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new FormData(form);
+            result.classList.remove('hidden');
+            result.textContent = "Отправка...";
+            result.className = "text-sm text-center mt-4 text-gray-400";
+
+            fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                body: formData
+            })
+            .then(async (response) => {
+                let json = await response.json();
+                if (response.status == 200) {
+                    result.textContent = "Заявка принята! Мы скоро свяжемся с вами.";
+                    result.className = "text-sm text-center mt-4 text-green-500 font-bold";
+                    form.reset();
+                } else {
+                    result.textContent = json.message;
+                    result.className = "text-sm text-center mt-4 text-red-500 font-bold";
+                }
+            })
+            .catch(error => {
+                result.textContent = "Ошибка сети. Попробуйте позже.";
+                result.className = "text-sm text-center mt-4 text-red-500 font-bold";
+            });
+        });
+    </script>
+</body>
+</html>
