@@ -28,8 +28,26 @@
         
         select option { background-color: #1a1a1a; color: white; }
 
-        .slide { opacity: 0; transition: opacity 1s ease-in-out; position: absolute; inset: 0; }
-        .slide.active { opacity: 0.4; }
+        /* Slide Styles */
+        .slide { opacity: 0; transition: opacity 1.5s ease-in-out; position: absolute; inset: 0; }
+        .slide.active { opacity: 0.35; }
+
+        /* Scanning Line Animation */
+        .scan-line {
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: rgba(239, 68, 68, 0.5);
+            box-shadow: 0 0 15px 2px #ef4444;
+            top: 0;
+            z-index: 5;
+            animation: scan 4s linear infinite;
+        }
+
+        @keyframes scan {
+            0% { top: 0%; }
+            100% { top: 100%; }
+        }
     </style>
 </head>
 <body>
@@ -41,17 +59,26 @@
     </nav>
 
     <header id="hero" class="relative h-[85vh] flex items-center justify-center overflow-hidden">
-        <div class="slide active bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=80')"></div>
-        <div class="slide bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&q=80')"></div>
-        <div class="slide bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1583121274602-3e2820c69888?auto=format&fit=crop&q=80')"></div>
+        <!-- Слайд 1: двигатель -->
+        <div class="slide active bg-cover bg-center" style="background-image: url('./images/engine.jpg')"></div>
+
+        <!-- Слайд 2: тормозная система -->
+        <div class="slide bg-cover bg-center" style="background-image: url('./images/brake-system.jpg')"></div>
+
+        <!-- Слайд 3: фара / кузовные детали / склад -->
+        <div class="slide bg-cover bg-center" style="background-image: url('./images/headlight-parts.jpg')"></div>
+
+        <!-- <div class="absolute inset-0 bg-black/45 z-[1]"></div> -->
 
         <div class="relative z-10 text-center px-4">
-            <span class="text-red-500 font-bold tracking-[0.3em] uppercase text-sm mb-4 block">Эксклюзивный сервис поиска</span>
+            <span class="text-red-500 font-bold tracking-[0.3em] uppercase text-sm mb-4 block">
+                Эксклюзивный сервис поиска запчастей
+            </span>
             <h1 class="text-5xl md:text-8xl font-extrabold mb-6 tracking-tighter uppercase leading-none">
-                ЛЮБАЯ ДЕТАЛЬ. <br><span class="text-red-600 text-shadow-xl">В ЛЮБУЮ ТОЧКУ.</span>
+                ЛЮБАЯ ДЕТАЛЬ. <br><span class="text-red-600">В ЛЮБУЮ ТОЧКУ.</span>
             </h1>
             <p class="text-gray-200 text-lg md:text-xl max-w-2xl mx-auto mb-10 font-light drop-shadow-md">
-                Мы находим редкие комплектующие там, где другие сдаются.
+                Двигатели, фары, подвеска, кузовные элементы, редкие комплектующие — найдём и доставим.
             </p>
             <a href="#order-form" class="accent-gradient px-12 py-5 rounded-full font-bold uppercase tracking-widest hover:scale-105 transition shadow-2xl inline-block">
                 Оформить заявку
@@ -87,8 +114,6 @@
                 <h3 class="text-2xl font-bold mb-8 uppercase tracking-widest text-red-500">Заявка на поиск</h3>
                 
                 <form id="orderForm" class="space-y-5 relative z-10">
-                    <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY_HERE">
-
                     <div class="grid grid-cols-2 gap-4">
                         <div class="space-y-2">
                             <label class="text-[10px] font-bold uppercase text-gray-500 ml-1">Автомобиль</label>
@@ -145,7 +170,7 @@
     <script>
         lucide.createIcons();
 
-        // 1. Слайдер
+        // 1. Slider Logic
         const slides = document.querySelectorAll('.slide');
         const dots = document.querySelectorAll('.dot');
         let currentSlide = 0;
@@ -170,7 +195,7 @@
             });
         });
 
-        // 2. Динамические контакты
+        // 2. Contact Input Toggle
         const contactMethod = document.getElementById('contact-method');
         const contactInput = document.getElementById('contact-input');
 
@@ -184,34 +209,30 @@
             }
         });
 
-        // 3. Отправка формы (AJAX)
+        // 3. Form Submission (Google App Script)
         const form = document.getElementById('orderForm');
         const result = document.getElementById('form-result');
+        const scriptURL = 'YOUR_GOOGLE_APP_SCRIPT_URL_HERE'; 
 
         form.addEventListener('submit', function(e) {
             e.preventDefault();
             const formData = new FormData(form);
             result.classList.remove('hidden');
-            result.textContent = "Отправка...";
+            result.textContent = "Processing inquiry...";
             result.className = "text-sm text-center mt-4 text-gray-400";
 
-            fetch('https://api.web3forms.com/submit', {
-                method: 'POST',
-                body: formData
+            fetch(scriptURL, { 
+                method: 'POST', 
+                body: formData,
+                mode: 'no-cors' 
             })
-            .then(async (response) => {
-                let json = await response.json();
-                if (response.status == 200) {
-                    result.textContent = "Заявка принята! Мы скоро свяжемся с вами.";
-                    result.className = "text-sm text-center mt-4 text-green-500 font-bold";
-                    form.reset();
-                } else {
-                    result.textContent = json.message;
-                    result.className = "text-sm text-center mt-4 text-red-500 font-bold";
-                }
+            .then(() => {
+                result.textContent = "Success! We will contact you shortly.";
+                result.className = "text-sm text-center mt-4 text-green-500 font-bold";
+                form.reset();
             })
             .catch(error => {
-                result.textContent = "Ошибка сети. Попробуйте позже.";
+                result.textContent = "Error sending. Please try again.";
                 result.className = "text-sm text-center mt-4 text-red-500 font-bold";
             });
         });
