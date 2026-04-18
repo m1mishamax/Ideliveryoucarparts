@@ -187,11 +187,44 @@
             }
         });
 
-        // 3. Form Submission (Google Script Logic currently disabled)
+        // 3. Form Submission Logic
         const form = document.getElementById('orderForm');
+        const resultText = document.getElementById('form-result');
+        const submitBtn = form.querySelector('button[type="submit"]');
+
+        // PASTE YOUR GOOGLE SCRIPT URL HERE
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby_zOw_OPxnC_mNFq6fqrau98JVvfPRyqOWmfrrLrvpNnXDTnxWaD4PV-5_vwMB8fY/exec"; 
+
         form.addEventListener('submit', function(e) {
             e.preventDefault();
-            alert('Sending logic is not yet implemented. Please connect your Google Script URL when ready.');
+            
+            // UI Feedback
+            submitBtn.disabled = true;
+            submitBtn.innerText = 'Отправка...';
+            resultText.classList.add('hidden');
+
+            const formData = new FormData(form);
+
+            fetch(SCRIPT_URL, { 
+                method: 'POST', 
+                body: formData 
+            })
+            .then(response => {
+                resultText.innerText = "Заявка принята! Мы скоро свяжемся с вами.";
+                resultText.className = "text-sm text-center mt-4 text-green-500 font-bold";
+                resultText.classList.remove('hidden');
+                form.reset();
+            })
+            .catch(error => {
+                console.error('Error!', error.message);
+                resultText.innerText = "Ошибка. Пожалуйста, попробуйте еще раз.";
+                resultText.className = "text-sm text-center mt-4 text-red-500 font-bold";
+                resultText.classList.remove('hidden');
+            })
+            .finally(() => {
+                submitBtn.disabled = false;
+                submitBtn.innerText = 'Найти и привезти';
+            });
         });
     </script>
 </body>
