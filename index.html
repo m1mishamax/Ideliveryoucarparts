@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Я принесу это вам | Эксклюзивный поиск запчастей</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
@@ -153,10 +154,41 @@
         </div>
     </section>
 
-    <script>
+        <script>
+        // --- 1. TELEGRAM MINI APP INITIALIZATION ---
+        // This makes the app open full-screen immediately
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+        tg.ready();
+
+        // --- 2. THE "PERFECT SCROLL" LOGIC ---
+        // This replaces the default browser "jump" with a calculated smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                if (targetElement) {
+                    // Adjust 'offset' if your header covers the form title
+                    const offset = -50; 
+                    const bodyRect = document.body.getBoundingClientRect().top;
+                    const elementRect = targetElement.getBoundingClientRect().top;
+                    const elementPosition = elementRect - bodyRect;
+                    const offsetPosition = elementPosition - offset;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // --- 3. YOUR ORIGINAL LOGIC (Slider, Icons, etc.) ---
         lucide.createIcons();
 
-        // 1. Slider Logic
         const slides = document.querySelectorAll('.slide');
         const dots = document.querySelectorAll('.dot');
         let currentSlide = 0;
@@ -181,7 +213,6 @@
             });
         });
 
-        // 2. Contact Input Toggle
         const contactMethod = document.getElementById('contact-method');
         const contactInput = document.getElementById('contact-input');
 
@@ -195,28 +226,21 @@
             }
         });
 
-        // 3. Form Submission Logic
+        // --- 4. YOUR ORIGINAL FORM SUBMISSION LOGIC ---
         const form = document.getElementById('orderForm');
         const resultText = document.getElementById('form-result');
         const submitBtn = form.querySelector('button[type="submit"]');
-
-        // PASTE YOUR GOOGLE SCRIPT URL HERE
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby-rO0kEcp1dN339zdxDQljL_eI9uyYgfLskGVrfKEGBIikBrSHX_HxScvuWYc4AR_wZg/exec"; 
+        const SCRIPT_URL = "YOUR_GOOGLE_SCRIPT_URL_HERE"; 
 
         form.addEventListener('submit', function(e) {
             e.preventDefault();
-            
-            // UI Feedback
             submitBtn.disabled = true;
             submitBtn.innerText = 'Отправка...';
             resultText.classList.add('hidden');
 
             const formData = new FormData(form);
 
-            fetch(SCRIPT_URL, { 
-                method: 'POST', 
-                body: formData 
-            })
+            fetch(SCRIPT_URL, { method: 'POST', body: formData })
             .then(response => {
                 resultText.innerText = "Заявка принята! Мы скоро свяжемся с вами.";
                 resultText.className = "text-sm text-center mt-4 text-green-500 font-bold";
@@ -224,7 +248,6 @@
                 form.reset();
             })
             .catch(error => {
-                console.error('Error!', error.message);
                 resultText.innerText = "Ошибка. Пожалуйста, попробуйте еще раз.";
                 resultText.className = "text-sm text-center mt-4 text-red-500 font-bold";
                 resultText.classList.remove('hidden');
