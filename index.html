@@ -33,9 +33,7 @@
         .slide { opacity: 0; transition: opacity 1.5s ease-in-out; position: absolute; inset: 0; }
         .slide.active { opacity: 0.35; }
         /* This ensures the form starts below your sticky nav and Telegram header */
-        #order-form {
-            scroll-margin-top: 100px;
-        }
+ 
     </style>
 </head>
 <body>
@@ -63,7 +61,7 @@
             <p class="text-gray-200 text-lg md:text-xl max-w-2xl mx-auto mb-10 font-light drop-shadow-md">
                 Двигатели, фары, подвеска, кузовные элементы, редкие комплектующие — найдём и доставим.
             </p>
-            <a href="#order-form" class="accent-gradient px-12 py-5 rounded-full font-bold uppercase tracking-widest hover:scale-105 transition shadow-2xl inline-block">
+            <a href="#form-container" class="accent-gradient px-12 py-5 rounded-full font-bold uppercase tracking-widest hover:scale-105 transition shadow-2xl inline-block">
                 Оформить заявку
             </a>
         </div>
@@ -93,7 +91,7 @@
                 </div>
             </div>
 
-            <div class="glass-card p-10 rounded-[2rem] border-red-900/20 shadow-3xl relative">
+            <div id="form-container" class="glass-card p-10 rounded-[2rem] border-red-900/20 shadow-3xl relative">
                 <h3 class="text-2xl font-bold mb-8 uppercase tracking-widest text-red-500">Заявка на поиск</h3>
                 
                 <form id="orderForm" class="space-y-5 relative z-10">
@@ -165,8 +163,7 @@
         tg.expand();
         tg.ready();
 
-        // --- 2. THE "PERFECT SCROLL" LOGIC ---
-        // Handle all anchor links (links starting with #)
+       // --- 2. THE "PERFECT SCROLL" LOGIC ---
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -175,9 +172,16 @@
                 const targetElement = document.querySelector(targetId);
                 
                 if (targetElement) {
-                    targetElement.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
+                    // 1. Get the distance from the top
+                    const elementPosition = targetElement.getBoundingClientRect().top;
+                    
+                    // 2. Subtract 150 pixels to leave room for your sticky menu
+                    const offsetPosition = elementPosition + window.pageYOffset - 50;
+
+                    // 3. Perform the scroll
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
                     });
                 }
             });
