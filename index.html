@@ -32,6 +32,10 @@
         /* Slide Styles */
         .slide { opacity: 0; transition: opacity 1.5s ease-in-out; position: absolute; inset: 0; }
         .slide.active { opacity: 0.35; }
+        /* This ensures the form starts below your sticky nav and Telegram header */
+        #order-form {
+            scroll-margin-top: 100px;
+        }
     </style>
 </head>
 <body>
@@ -162,7 +166,7 @@
         tg.ready();
 
         // --- 2. THE "PERFECT SCROLL" LOGIC ---
-        // This replaces the default browser "jump" with a calculated smooth scroll
+        // Handle all anchor links (links starting with #)
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
                 e.preventDefault();
@@ -171,21 +175,13 @@
                 const targetElement = document.querySelector(targetId);
                 
                 if (targetElement) {
-                    // Adjust 'offset' if your header covers the form title
-                    const offset = -50; 
-                    const bodyRect = document.body.getBoundingClientRect().top;
-                    const elementRect = targetElement.getBoundingClientRect().top;
-                    const elementPosition = elementRect - bodyRect;
-                    const offsetPosition = elementPosition - offset;
-
-                    window.scrollTo({
-                        top: offsetPosition,
-                        behavior: 'smooth'
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
                     });
                 }
             });
         });
-
         // --- 3. YOUR ORIGINAL LOGIC (Slider, Icons, etc.) ---
         lucide.createIcons();
 
